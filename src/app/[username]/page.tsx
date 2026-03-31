@@ -14,6 +14,7 @@ import { ProfileExperienceListWithReview } from './profile-experience';
 import { bindingFollowerStatusFromUser } from '@/server/services/followers';
 import { getSession } from '../session';
 import { MainLayout } from '@/components/blocks/layout/MainLayout';
+import { UserShowcases } from './user-showcases';
 
 export async function generateMetadata({
   params,
@@ -30,6 +31,9 @@ export async function generateMetadata({
     description:
       profile.member_profile.bio?.substring(0, 160) ||
       `${profile.user.name} is a member of Khmer Coders, Cambodia's largest coding community.`,
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/@${profile.member_profile.alias}`,
+    },
     openGraph: {
       title: `${profile.user.name} | Khmer Coders`,
       description:
@@ -121,6 +125,8 @@ export default async function UserProfilePage({
             <ProfileExperienceListWithReview experiences={experiences} />
           </div>
         </div>
+
+        <UserShowcases userId={profile.user.id} currentUserId={session?.user?.id} />
       </ProfileAiReviewProvider>
     </MainLayout>
   );

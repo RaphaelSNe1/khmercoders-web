@@ -36,8 +36,8 @@ export enum UserLevel {
   SuperAdmin = 20,
 }
 
-export type BindingResourceType = 'profile' | 'article';
-export type LikableResourceType = 'article' | 'post';
+export type BindingResourceType = 'profile' | 'article' | 'showcase' | 'showcase-banner';
+export type LikableResourceType = 'article' | 'post' | 'showcase';
 export type PostableResourceType = 'article' | 'post';
 
 export type MainDatabase = DrizzleD1Database<typeof schema>;
@@ -89,6 +89,13 @@ export enum ArticleReviewStatus {
 }
 
 export type ArticlePreviewRecord = Omit<ArticleRecord, 'content'>;
+
+export type ShowcaseRecord = typeof schema.showcase.$inferSelect & {
+  user?: UserRecord & {
+    profile?: ProfileRecord;
+  };
+  hasCurrentUserLiked?: boolean;
+};
 
 export type FeedRecord = (
   | { type: 'article'; data: ArticlePreviewRecord }

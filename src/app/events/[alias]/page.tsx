@@ -1,8 +1,7 @@
 import { eventsDatabase } from '@/data/events';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { IPartner, IPartnerWithTags, partners } from '@/data/partners';
-import { PartnerCard } from '@/components/atoms/partner-card';
+import { IPartnerWithTags, partners } from '@/data/partners';
 import { Clock, Pin } from 'lucide-react';
 import { Metadata } from 'next';
 import { MainLayout } from '@/components/blocks/layout/MainLayout';
@@ -15,8 +14,6 @@ import {
   TableRow,
 } from '@/components/generated/table';
 import { StackNavigation } from '@/components/blocks/layout/StackNavigation';
-import { title } from 'process';
-import { time } from 'console';
 
 export async function generateMetadata({
   params,
@@ -72,7 +69,7 @@ export default async function EventDetailPage({ params }: { params: { alias: str
     .filter(Boolean) as IPartnerWithTags[];
 
   return (
-    <MainLayout>
+    <MainLayout hideRightNav>
       <StackNavigation defaultBackURL="/events" />
 
       <Image
@@ -135,7 +132,6 @@ export default async function EventDetailPage({ params }: { params: { alias: str
               <TableRow>
                 <TableHead style={{ width: 50 }}></TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead>Type</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -143,12 +139,16 @@ export default async function EventDetailPage({ params }: { params: { alias: str
                 return (
                   <TableRow key={sponsor.id}>
                     <TableCell>
-                      <div className="w-16 h-16 rounded-full overflow-hidden bg-black-secondary flex items-center justify-center">
+                      <div className="w-16 h-16 rounded overflow-hidden bg-black-secondary flex items-center justify-center">
                         <img alt={sponsor.name} title={sponsor.name} src={sponsor.logo}></img>
                       </div>
                     </TableCell>
-                    <TableCell className="font-bold">{sponsor.name}</TableCell>
-                    <TableCell>{Object.keys(sponsor.tags).join(', ')}</TableCell>
+                    <TableCell>
+                      <div className="font-medium">{sponsor.name}</div>
+                      <div className="text-muted-foreground">
+                        {Object.keys(sponsor.tags).join(', ')}
+                      </div>
+                    </TableCell>
                   </TableRow>
                 );
               })}
